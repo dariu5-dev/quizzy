@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Quizzy — Leaderboard</title>
+  <link rel="stylesheet" href="/static/style.css" />
+</head>
+<body>
+  <nav>
+    <a class="brand" href="/">Quizzy</a>
+    <a href="/">Dashboard</a>
+  </nav>
+
+  <div class="page">
+    <div class="flex-between mb-4">
+      <div>
+        <h1 id="quiz-title">Leaderboard</h1>
+        <p class="text-muted" id="last-updated"></p>
+      </div>
+      <button id="refresh-btn" class="btn btn-ghost btn-sm">Refresh</button>
+    </div>
+
+    <div class="card" style="overflow-x:auto">
+      <table class="leaderboard-table" id="leaderboard-table">
+        <thead>
+          <tr>
+            <th>Rank</th>
+            <th>Name</th>
+            <th>Score</th>
+            <th>%</th>
+            <th>Time</th>
+            <th>Completed</th>
+          </tr>
+        </thead>
+        <tbody id="leaderboard-body">
+          <tr><td colspan="6" style="text-align:center;color:var(--text-muted);padding:2rem">Loading…</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p class="text-muted mt-4" style="font-size:0.8rem">Auto-refreshes every 30 seconds.</p>
+  </div>
+
+  <script type="module" src="/static/js/leaderboard.js"></script>
+</body>
+</html>

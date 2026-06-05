@@ -1,0 +1,10 @@
+fastapi
+uvicorn[standard]
+motor
+beanie
+python-multipart
+pandas
+openpyxl
+pdfplumber
+pydantic
+python-dotenv

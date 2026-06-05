@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Quizzy — Take Quiz</title>
+  <link rel="stylesheet" href="/static/style.css" />
+</head>
+<body>
+  <nav>
+    <a class="brand" href="/">Quizzy</a>
+  </nav>
+
+  <!-- Name entry screen -->
+  <div id="name-screen" class="name-screen">
+    <div class="card">
+      <h1 id="quiz-title-name">Loading quiz…</h1>
+      <p id="quiz-desc-name" class="text-muted mb-4"></p>
+      <div id="quiz-meta-name" class="mb-4"></div>
+      <div class="form-group">
+        <label for="participant-name">Your Name</label>
+        <input type="text" id="participant-name" placeholder="Enter your name to begin" />
+      </div>
+      <button id="start-btn" class="btn btn-primary">Start Quiz</button>
+    </div>
+  </div>
+
+  <!-- Quiz taking screen -->
+  <div id="quiz-screen" class="page" style="display:none">
+    <div class="take-header">
+      <div>
+        <h1 id="quiz-title-take" style="margin-bottom:0.25rem"></h1>
+        <span class="text-muted" id="progress-label"></span>
+      </div>
+      <div id="timer-display" class="timer" style="display:none"></div>
+    </div>
+
+    <div class="progress-bar">
+      <div class="progress-bar-fill" id="progress-bar-fill" style="width:0%"></div>
+    </div>
+
+    <div id="questions-container"></div>
+
+    <div id="submit-row" class="mt-6" style="display:none">
+      <button id="submit-btn" class="btn btn-primary">Submit Quiz</button>
+    </div>
+  </div>
+
+  <!-- Results screen -->
+  <div id="results-screen" class="page" style="display:none">
+    <div id="result-banner" class="result-banner mb-4">
+      <div class="score" id="result-score"></div>
+      <div class="label" id="result-label"></div>
+    </div>
+
+    <div id="answers-review"></div>
+
+    <div class="mt-6" style="display:flex;gap:1rem;flex-wrap:wrap">
+      <a id="leaderboard-link" href="#" class="btn btn-primary">View Leaderboard</a>
+      <a href="/" class="btn btn-ghost">Back to Dashboard</a>
+    </div>
+  </div>
+
+  <script type="module" src="/static/js/take.js"></script>
+</body>
+</html>

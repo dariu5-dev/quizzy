@@ -1,0 +1,38 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+env/
+dist/
+build/
+*.pyo
+*.pyd
+
+# Env — never commit real credentials
+backend/.env
+.env
+*.env
+
+# Logs
+*.log
+/tmp/
+
+# OS
+.DS_Store
+.DS_Store?
+._*
+Thumbs.db
+ehthumbs.db
+
+# Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Node (if you ever add a build step)
+node_modules/
+package-lock.json

@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Quizzy — Dashboard</title>
+  <link rel="stylesheet" href="/static/style.css" />
+</head>
+<body>
+  <nav>
+    <a class="brand" href="/">Quizzy</a>
+  </nav>
+
+  <div class="page-wide">
+    <div class="flex-between mb-4">
+      <h1>Your Quizzes</h1>
+      <a href="/create.html" class="btn btn-primary">+ New Quiz</a>
+    </div>
+
+    <div id="quiz-grid" class="quiz-grid">
+      <div class="empty-state" id="loading">Loading...</div>
+    </div>
+  </div>
+
+  <script type="module" src="/static/js/dashboard.js"></script>
+</body>
+</html>

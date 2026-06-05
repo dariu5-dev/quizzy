@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Quizzy — Create Quiz</title>
+  <link rel="stylesheet" href="/static/style.css" />
+</head>
+<body>
+  <nav>
+    <a class="brand" href="/">Quizzy</a>
+    <a href="/">Dashboard</a>
+  </nav>
+
+  <div class="page">
+    <h1 id="page-title">New Quiz</h1>
+
+    <!-- Quiz metadata -->
+    <div class="card mb-4">
+      <h2>Quiz Details</h2>
+      <div class="form-group">
+        <label for="title">Title *</label>
+        <input type="text" id="title" placeholder="e.g. Biology Chapter 3" />
+      </div>
+      <div class="form-group">
+        <label for="description">Description (optional)</label>
+        <textarea id="description" rows="2" placeholder="Brief description of this quiz"></textarea>
+      </div>
+      <div class="form-group">
+        <label for="time-limit">Time Limit (minutes) — leave blank for untimed</label>
+        <input type="number" id="time-limit" min="1" placeholder="e.g. 30" style="max-width:180px" />
+      </div>
+      <button id="save-meta-btn" class="btn btn-primary">Save Details</button>
+      <span id="save-status" class="text-muted mt-2" style="margin-left:0.75rem"></span>
+    </div>
+
+    <!-- Import section (only visible after quiz is created) -->
+    <div class="card mb-4" id="import-section" style="display:none">
+      <h2>Import Questions</h2>
+      <p class="text-muted mb-4">Upload a CSV, Excel, or PDF file to bulk-add questions.</p>
+
+      <div style="display:flex;gap:0.75rem;flex-wrap:wrap;margin-bottom:1rem">
+        <label class="btn btn-ghost" style="cursor:pointer">
+          CSV <input type="file" id="import-csv" accept=".csv" hidden />
+        </label>
+        <label class="btn btn-ghost" style="cursor:pointer">
+          Excel <input type="file" id="import-excel" accept=".xlsx,.xls" hidden />
+        </label>
+        <label class="btn btn-ghost" style="cursor:pointer">
+          PDF <input type="file" id="import-pdf" accept=".pdf" hidden />
+        </label>
+      </div>
+
+      <div id="import-preview" style="display:none">
+        <h3>Preview (<span id="preview-count">0</span> questions)</h3>
+        <div class="import-preview-list" id="preview-list"></div>
+        <div id="import-errors" class="import-error mt-2"></div>
+        <div style="display:flex;gap:0.75rem;margin-top:1rem">
+          <button id="confirm-import-btn" class="btn btn-primary">Add to Quiz</button>
+          <button id="cancel-import-btn" class="btn btn-ghost">Cancel</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Questions list -->
+    <div id="questions-section" style="display:none">
+      <div class="flex-between mb-4">
+        <h2>Questions</h2>
+        <div style="display:flex;gap:0.5rem">
+          <button id="add-mcq-btn" class="btn btn-ghost btn-sm">+ MCQ</button>
+          <button id="add-sa-btn" class="btn btn-ghost btn-sm">+ Short Answer</button>
+        </div>
+      </div>
+
+      <div id="questions-list"></div>
+
+      <div id="no-questions" class="empty-state" style="display:none">
+        <p>No questions yet. Add one above or import from a file.</p>
+      </div>
+    </div>
+  </div>
+
+  <script type="module" src="/static/js/create.js"></script>
+</body>
+</html>
