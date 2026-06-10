@@ -1,8 +1,15 @@
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import Literal, Optional
+
+import uuid
 from beanie import Document
 from pydantic import BaseModel, Field
-import uuid
+from pymongo import ASCENDING, IndexModel
+
+
+def utcnow() -> datetime:
+    """Return the current UTC time as a naive datetime (compatible with MongoDB storage)."""
+    return datetime.now(timezone.utc).replace(tzinfo=None)
 
 
 class Option(BaseModel):
@@ -16,7 +23,7 @@ class Question(BaseModel):
     text: str
     question_type: Literal["mcq", "short_answer"]
     options: list[Option] = []
-    correct_answer: Optional[str] = None  # for short_answer
+    correct_answer: Optional[str] = None  # only used for short_answer
     points: int = 1
     order_index: int = 0
 
@@ -26,11 +33,15 @@ class Quiz(Document):
     description: str = ""
     time_limit_minutes: Optional[int] = None  # None means untimed
     share_token: str = Field(default_factory=lambda: str(uuid.uuid4()))
-    created_at: datetime = Field(default_factory=datetime.utcnow)
+    created_at: datetime = Field(default_factory=utcnow)
     questions: list[Question] = []
 
     class Settings:
         name = "quizzes"
+        indexes = [
+            # Fast lookup by share token (used every time someone opens a quiz link)
+            IndexModel([("share_token", ASCENDING)], unique=True),
+        ]
 
 
 class AnswerRecord(BaseModel):
@@ -44,7 +55,7 @@ class AnswerRecord(BaseModel):
 class Session(Document):
     quiz_id: str
     participant_name: str
-    started_at: datetime = Field(default_factory=datetime.utcnow)
+    started_at: datetime = Field(default_factory=utcnow)
     completed_at: Optional[datetime] = None
     score: int = 0
     max_score: int = 0
@@ -53,3 +64,7 @@ class Session(Document):
 
     class Settings:
         name = "sessions"
+        indexes = [
+            # Leaderboard query filters and sorts by quiz_id + completed_at
+            IndexModel([("quiz_id", ASCENDING), ("completed_at", ASCENDING)]),
+        ]

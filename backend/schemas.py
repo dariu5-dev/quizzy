@@ -1,34 +1,34 @@
 from typing import Literal, Optional
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 from models import Question
 
 
 # --- Quiz schemas ---
 
 class OptionIn(BaseModel):
-    text: str
+    text: str = Field(..., min_length=1, max_length=500)
     is_correct: bool = False
 
 
 class QuestionIn(BaseModel):
-    text: str
+    text: str = Field(..., min_length=1, max_length=2000)
     question_type: Literal["mcq", "short_answer"]
-    options: list[OptionIn] = []
-    correct_answer: Optional[str] = None
-    points: int = 1
-    order_index: int = 0
+    options: list[OptionIn] = Field(default=[], max_length=6)
+    correct_answer: Optional[str] = Field(None, max_length=1000)
+    points: int = Field(1, ge=1, le=100)
+    order_index: int = Field(0, ge=0)
 
 
 class QuizCreate(BaseModel):
-    title: str
-    description: str = ""
-    time_limit_minutes: Optional[int] = None
+    title: str = Field(..., min_length=1, max_length=200)
+    description: str = Field("", max_length=1000)
+    time_limit_minutes: Optional[int] = Field(None, ge=1, le=600)
 
 
 class QuizUpdate(BaseModel):
-    title: Optional[str] = None
-    description: Optional[str] = None
-    time_limit_minutes: Optional[int] = None
+    title: Optional[str] = Field(None, min_length=1, max_length=200)
+    description: Optional[str] = Field(None, max_length=1000)
+    time_limit_minutes: Optional[int] = Field(None, ge=1, le=600)
 
 
 class QuizSummary(BaseModel):
@@ -51,29 +51,57 @@ class QuizDetail(BaseModel):
     questions: list[Question]
 
 
+# --- Public quiz schemas (correct answers excluded) ---
+# These are used when serving the quiz to participants.
+
+class OptionPublic(BaseModel):
+    """MCQ option shown to the quiz taker — no is_correct flag."""
+    id: str
+    text: str
+
+
+class QuestionPublic(BaseModel):
+    """Question shown to the quiz taker — no correct answer exposed."""
+    id: str
+    text: str
+    question_type: Literal["mcq", "short_answer"]
+    options: list[OptionPublic]
+    points: int
+    order_index: int
+
+
+class QuizPublic(BaseModel):
+    """Quiz served to participants via the share link."""
+    id: str
+    title: str
+    description: str
+    time_limit_minutes: Optional[int]
+    questions: list[QuestionPublic]
+
+
 # --- Session schemas ---
 
 class AnswerIn(BaseModel):
-    question_id: str
-    selected_option_id: Optional[str] = None
-    text_answer: Optional[str] = None
+    question_id: str = Field(..., min_length=1, max_length=100)
+    selected_option_id: Optional[str] = Field(None, max_length=100)
+    text_answer: Optional[str] = Field(None, max_length=5000)
 
 
 class SessionStart(BaseModel):
-    quiz_id: str
-    participant_name: str
+    quiz_id: str = Field(..., min_length=1, max_length=100)
+    participant_name: str = Field(..., min_length=1, max_length=100)
 
 
 class SessionSubmit(BaseModel):
-    answers: list[AnswerIn]
-    time_taken_seconds: Optional[int] = None
+    answers: list[AnswerIn] = Field(..., max_length=500)
+    time_taken_seconds: Optional[int] = Field(None, ge=0, le=86400)
 
 
 class AnswerResult(BaseModel):
     question_id: str
     is_correct: bool
     points_earned: int
-    correct_answer: Optional[str] = None  # shown after submit
+    correct_answer: Optional[str] = None  # revealed after submit
 
 
 class SessionResult(BaseModel):
@@ -99,11 +127,11 @@ class LeaderboardEntry(BaseModel):
 # --- Import preview ---
 
 class ImportedQuestion(BaseModel):
-    text: str
+    text: str = Field(..., min_length=1, max_length=2000)
     question_type: Literal["mcq", "short_answer"]
-    options: list[OptionIn] = []
-    correct_answer: Optional[str] = None
-    points: int = 1
+    options: list[OptionIn] = Field(default=[], max_length=6)
+    correct_answer: Optional[str] = Field(None, max_length=1000)
+    points: int = Field(1, ge=1, le=100)
 
 
 class ImportPreview(BaseModel):
@@ -112,4 +140,4 @@ class ImportPreview(BaseModel):
 
 
 class ImportConfirm(BaseModel):
-    questions: list[ImportedQuestion]
+    questions: list[ImportedQuestion] = Field(..., max_length=500)

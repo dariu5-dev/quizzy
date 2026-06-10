@@ -1,10 +1,11 @@
 fastapi
 uvicorn[standard]
 motor
-beanie
+beanie==1.26.0
 python-multipart
 pandas
 openpyxl
 pdfplumber
 pydantic
 python-dotenv
+slowapi
